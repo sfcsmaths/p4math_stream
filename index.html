@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>健康生活：60 分鐘步行大挑戰</title>
+<style>
+  body { 
+    font-family: 'Arial', sans-serif; 
+    background-color: #fdfbf7; 
+    padding: 20px; 
+    text-align: center; 
+    color: #333;
+  }
+  .container { 
+    max-width: 600px; 
+    margin: auto; 
+    background: white; 
+    padding: 30px; 
+    border-radius: 15px; 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+  }
+  h1 { color: #2c3e50; font-size: 28px;}
+  p.intro { font-size: 18px; color: #555; margin-bottom: 20px;}
+  input { 
+    width: 90%; 
+    padding: 15px; 
+    margin: 10px 0; 
+    font-size: 18px; 
+    border: 2px solid #bdc3c7; 
+    border-radius: 8px; 
+    box-sizing: border-box;
+  }
+  button { 
+    background-color: #27ae60; 
+    color: white; 
+    border: none; 
+    padding: 15px 30px; 
+    font-size: 20px; 
+    border-radius: 8px; 
+    cursor: pointer; 
+    margin-top: 20px; 
+    width: 90%;
+    box-shadow: 0 4px 6px rgba(39, 174, 96, 0.3);
+  }
+  button:active { 
+    background-color: #2ecc71; 
+    transform: translateY(2px);
+  }
+  #result { 
+    margin-top: 30px; 
+    font-size: 22px; 
+    font-weight: bold; 
+    color: #d35400; 
+    background-color: #fef9e7;
+    padding: 20px;
+    border-radius: 10px;
+    display: none;
+  }
+  .destination { color: #2980b9; margin-top: 15px; font-size: 24px; }
+  .desc { font-size: 18px; color: #7f8c8d; font-weight: normal; margin-top: 5px;}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🏃‍♂️ 60 分鐘步行大挑戰 🏃‍♀️</h1>
+  <p class="intro">請輸入你在操場量度的數據，看看你可以走到哪裡！</p>
+  
+  <input type="number" id="stepLength" placeholder="你的步距 (厘米，例如：40)" />
+  <input type="number" id="roundSteps" placeholder="行一圈的步數 (例如：100)" />
+  <input type="number" id="roundTime" placeholder="行一圈所需時間 (分鐘，例如：2)" />
+  
+  <button onclick="calculate()">計算結果 📐</button>
+
+  <div id="result"></div>
+</div>
+
+<script>
+  function calculate() {
+    const stepLength = parseFloat(document.getElementById('stepLength').value);
+    const roundSteps = parseFloat(document.getElementById('roundSteps').value);
+    const roundTime = parseFloat(document.getElementById('roundTime').value);
+
+    if(!stepLength || !roundSteps || !roundTime) {
+      alert('同學，請填寫所有數據喔！🍎');
+      return;
+    }
+
+    const totalSteps = (60 / roundTime) * roundSteps;
+    const totalDistance = (totalSteps * stepLength) / 100; // 轉換為米
+
+    let destination = "";
+    let desc = "";
+    
+    if(totalDistance < 1000) {
+      destination = "灣仔公園";
+      desc = "就在附近，散步放鬆的好去處！";
+    } else if(totalDistance < 2000) {
+      destination = "香港中央圖書館";
+      desc = "可以去看豐富的圖書呢！";
+    } else if(totalDistance < 3000) {
+      destination = "維多利亞公園";
+      desc = "空間寬敞，適合做各種運動！";
+    } else {
+      destination = "香港公園";
+      desc = "挑戰成功！可以去看看溫室和觀鳥園！";
+    }
+
+    const resultDiv = document.getElementById('result');
+    resultDiv.style.display = 'block';
+    resultDiv.innerHTML = `
+      <p>✅ 60 分鐘總步數：${totalSteps.toFixed(0)} 步</p>
+      <p>✅ 60 分鐘總距離：${totalDistance.toFixed(0)} 米</p>
+      <hr style="border: 1px solid #f8c471; margin: 15px 0;">
+      <p class="destination">📍 建議目的地：<br><strong>${destination}</strong></p>
+      <p class="desc">${desc}</p>
+    `;
+  }
+</script>
+</body>
+</html>
