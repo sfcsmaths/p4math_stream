@@ -1,121 +1,526 @@
 <!DOCTYPE html>
-<html lang="zh-HK">
+<html lang="zh-Hant">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>健康生活：60 分鐘步行大挑戰</title>
-<style>
-  body { 
-    font-family: 'Arial', sans-serif; 
-    background-color: #fdfbf7; 
-    padding: 20px; 
-    text-align: center; 
-    color: #333;
-  }
-  .container { 
-    max-width: 600px; 
-    margin: auto; 
-    background: white; 
-    padding: 30px; 
-    border-radius: 15px; 
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
-  }
-  h1 { color: #2c3e50; font-size: 28px;}
-  p.intro { font-size: 18px; color: #555; margin-bottom: 20px;}
-  input { 
-    width: 90%; 
-    padding: 15px; 
-    margin: 10px 0; 
-    font-size: 18px; 
-    border: 2px solid #bdc3c7; 
-    border-radius: 8px; 
-    box-sizing: border-box;
-  }
-  button { 
-    background-color: #27ae60; 
-    color: white; 
-    border: none; 
-    padding: 15px 30px; 
-    font-size: 20px; 
-    border-radius: 8px; 
-    cursor: pointer; 
-    margin-top: 20px; 
-    width: 90%;
-    box-shadow: 0 4px 6px rgba(39, 174, 96, 0.3);
-  }
-  button:active { 
-    background-color: #2ecc71; 
-    transform: translateY(2px);
-  }
-  #result { 
-    margin-top: 30px; 
-    font-size: 22px; 
-    font-weight: bold; 
-    color: #d35400; 
-    background-color: #fef9e7;
-    padding: 20px;
-    border-radius: 10px;
-    display: none;
-  }
-  .destination { color: #2980b9; margin-top: 15px; font-size: 24px; }
-  .desc { font-size: 18px; color: #7f8c8d; font-weight: normal; margin-top: 5px;}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>60 分鐘步行大挑戰計算器 - 嘉諾撒聖方濟各學校</title>
+  <style>
+    :root {
+      --primary-color: #2e7d32;
+      --primary-hover: #1b5e20;
+      --accent-color: #f57c00;
+      --accent-hover: #e65100;
+      --blue-btn: #1976d2;
+      --blue-hover: #0d47a1;
+      --bg-color: #f4f9f4;
+      --card-bg: #ffffff;
+      --text-color: #333333;
+      --border-color: #cccccc;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: "PingFang TC", "Microsoft JhengHei", "Heiti TC", sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    .calculator-card {
+      background: var(--card-bg);
+      max-width: 560px;
+      width: 100%;
+      padding: 28px 24px;
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      border: 1px solid #e0e0e0;
+    }
+
+    .header-title {
+      text-align: center;
+      font-size: 26px;
+      font-weight: 800;
+      color: #1a237e;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .school-subtitle {
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 4px;
+    }
+
+    .prompt-text {
+      text-align: center;
+      font-size: 15px;
+      color: #444;
+      font-weight: 600;
+      margin-bottom: 22px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 14px;
+      font-weight: bold;
+      color: #2c3e50;
+      margin-bottom: 6px;
+    }
+
+    .input-box {
+      width: 100%;
+      padding: 12px 14px;
+      font-size: 16px;
+      border: 1.5px solid var(--border-color);
+      border-radius: 10px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .input-box:focus {
+      border-color: #1976d2;
+      box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.15);
+    }
+
+    .time-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .btn-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .action-btn {
+      width: 100%;
+      padding: 13px;
+      font-size: 17px;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      color: #ffffff;
+      transition: background-color 0.2s, transform 0.1s;
+    }
+
+    .action-btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-steps {
+      background-color: var(--blue-btn);
+    }
+    .btn-steps:hover {
+      background-color: var(--blue-hover);
+    }
+
+    .btn-distance {
+      background-color: var(--primary-color);
+    }
+    .btn-distance:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .btn-explain {
+      background-color: var(--accent-color);
+    }
+    .btn-explain:hover {
+      background-color: var(--accent-hover);
+    }
+
+    /* 結果顯示區域 */
+    .result-panel {
+      margin-top: 22px;
+      padding: 18px;
+      border-radius: 14px;
+      background: #f8fafc;
+      border-left: 5px solid #1976d2;
+      display: none;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .result-panel.visible {
+      display: block;
+    }
+
+    .result-title {
+      font-size: 16px;
+      font-weight: bold;
+      color: #0f172a;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .result-value {
+      font-size: 22px;
+      font-weight: 800;
+      color: #1e3a8a;
+      margin-bottom: 8px;
+    }
+
+    .highlight-box {
+      background-color: #e8f5e9;
+      border: 1px solid #c8e6c9;
+      padding: 16px;
+      border-radius: 12px;
+      margin-top: 10px;
+    }
+
+    .furthest-card {
+      background: #ffffff;
+      border: 2px solid #66bb6a;
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .furthest-icon {
+      font-size: 28px;
+      flex-shrink: 0;
+    }
+
+    .furthest-name {
+      font-size: 16px;
+      font-weight: bold;
+      color: #1b5e20;
+      line-height: 1.4;
+    }
+
+    .furthest-dist {
+      font-size: 13px;
+      color: #555555;
+      margin-top: 2px;
+    }
+
+    .next-target-box {
+      margin-top: 10px;
+      font-size: 13px;
+      color: #555555;
+      background: rgba(255, 255, 255, 0.7);
+      padding: 8px 12px;
+      border-radius: 8px;
+    }
+
+    .verify-box {
+      background-color: #fff8e1;
+      border: 1px solid #ffe082;
+      padding: 14px;
+      border-radius: 10px;
+      margin-top: 10px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .step-badge {
+      display: inline-block;
+      background: #f57c00;
+      color: #fff;
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-right: 4px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-<div class="container">
-  <h1>🏃‍♂️ 60 分鐘步行大挑戰 🏃‍♀️</h1>
-  <p class="intro">請輸入你在操場量度的數據，看看你可以走到哪裡！</p>
-  
-  <input type="number" id="stepLength" placeholder="你的步距 (厘米，例如：40)" />
-  <input type="number" id="roundSteps" placeholder="行一圈的步數 (例如：100)" />
-  <input type="number" id="roundTime" placeholder="行一圈所需時間 (分鐘，例如：2)" />
-  
-  <button onclick="calculate()">計算結果 📐</button>
 
-  <div id="result"></div>
-</div>
+  <div class="calculator-card">
+    <div class="school-subtitle">嘉諾撒聖方濟各學校</div>
+    <div class="header-title">🏃 60 分鐘步行大挑戰 🏃</div>
+    <div class="prompt-text">請輸入你在有蓋操場量度的數據：</div>
 
-<script>
-  function calculate() {
-    const stepLength = parseFloat(document.getElementById('stepLength').value);
-    const roundSteps = parseFloat(document.getElementById('roundSteps').value);
-    const roundTime = parseFloat(document.getElementById('roundTime').value);
+    <!-- 輸入項 1 -->
+    <div class="form-group">
+      <label class="form-label" for="stepLength">你的步距 (cm) (例如: 40)</label>
+      <input type="number" id="stepLength" class="input-box" placeholder="例如：40" min="1" step="0.1">
+    </div>
 
-    if(!stepLength || !roundSteps || !roundTime) {
-      alert('同學，請填寫所有數據喔！🍎');
-      return;
+    <!-- 輸入項 2 -->
+    <div class="form-group">
+      <label class="form-label" for="lapsSteps">行 5 圈的總步數 (例如: 500)</label>
+      <input type="number" id="lapsSteps" class="input-box" placeholder="例如：500" min="1">
+    </div>
+
+    <!-- 輸入項 3：時間 -->
+    <div class="form-group">
+      <label class="form-label">行 5 圈所需的時間：</label>
+      <div class="time-grid">
+        <div>
+          <label class="form-label" for="timeMinutes" style="font-weight: normal; font-size: 13px;">分鐘 (例如: 5)</label>
+          <input type="number" id="timeMinutes" class="input-box" placeholder="例如：5" min="0">
+        </div>
+        <div>
+          <label class="form-label" for="timeSeconds" style="font-weight: normal; font-size: 13px;">秒 (例如: 30)</label>
+          <input type="number" id="timeSeconds" class="input-box" placeholder="例如：30" min="0" max="59">
+        </div>
+      </div>
+    </div>
+
+    <!-- 按鈕群 -->
+    <div class="btn-stack">
+      <!-- 按鈕 1 -->
+      <button class="action-btn btn-steps" onclick="calculateSteps()">
+        計算 60 分鐘步行步數 👟
+      </button>
+
+      <!-- 按鈕 2 -->
+      <button class="action-btn btn-distance" onclick="calculateDistance()">
+        計算 60 分鐘步行距離 📐
+      </button>
+
+      <!-- 按鈕 3 -->
+      <button class="action-btn btn-explain" onclick="showVerification()">
+        了解如何得出結果(驗算) 📱
+      </button>
+    </div>
+
+    <!-- 結果展示區 -->
+    <div id="resultPanel" class="result-panel">
+      <!-- 動態載入結果 -->
+    </div>
+  </div>
+
+  <script>
+    // 獲取並驗證用戶數據
+    function getInputData() {
+      const stepLength = parseFloat(document.getElementById('stepLength').value);
+      const lapsSteps = parseFloat(document.getElementById('lapsSteps').value);
+      const minutes = parseFloat(document.getElementById('timeMinutes').value) || 0;
+      const seconds = parseFloat(document.getElementById('timeSeconds').value) || 0;
+
+      const totalSeconds = (minutes * 60) + seconds;
+
+      if (!stepLength || stepLength <= 0) {
+        alert('請先輸入有效的「步距 (cm)」！');
+        return null;
+      }
+      if (!lapsSteps || lapsSteps <= 0) {
+        alert('請先輸入有效的「行 5 圈的總步數」！');
+        return null;
+      }
+      if (totalSeconds <= 0) {
+        alert('請輸入有效的「時間」（分鐘或秒不能全為 0）！');
+        return null;
+      }
+
+      // 核心計算公式
+      // 1. 每秒步數 = 5圈步數 / 總秒數
+      // 2. 60分鐘(3600秒)總步數 = 每秒步數 * 3600
+      const stepsIn60Min = Math.round((lapsSteps / totalSeconds) * 3600);
+
+      // 3. 總距離 (cm) = 總步數 * 步距
+      const distCm = Math.round(stepsIn60Min * stepLength);
+      const distM = (distCm / 100).toFixed(1);
+      const distKm = (distCm / 100000).toFixed(2);
+
+      return {
+        stepLength,
+        lapsSteps,
+        minutes,
+        seconds,
+        totalSeconds,
+        stepsIn60Min,
+        distCm,
+        distM,
+        distKm
+      };
     }
 
-    const totalSteps = (60 / roundTime) * roundSteps;
-    const totalDistance = (totalSteps * stepLength) / 100; // 轉換為米
+    // 按鈕 1：計算 60 分鐘步數
+    function calculateSteps() {
+      const data = getInputData();
+      if (!data) return;
 
-    let destination = "";
-    let desc = "";
-    
-    if(totalDistance < 1000) {
-      destination = "灣仔公園";
-      desc = "就在附近，散步放鬆的好去處！";
-    } else if(totalDistance < 2000) {
-      destination = "香港中央圖書館";
-      desc = "可以去看豐富的圖書呢！";
-    } else if(totalDistance < 3000) {
-      destination = "維多利亞公園";
-      desc = "空間寬敞，適合做各種運動！";
-    } else {
-      destination = "香港公園";
-      desc = "挑戰成功！可以去看看溫室和觀鳥園！";
+      const panel = document.getElementById('resultPanel');
+      panel.style.borderLeftColor = "#1976d2";
+      panel.innerHTML = `
+        <div class="result-title">👟 60 分鐘步行步數推算</div>
+        <div class="result-value">${data.stepsIn60Min.toLocaleString()} 步</div>
+        <p style="margin: 0; font-size: 14px; color: #555;">
+          你在 <strong>${data.minutes} 分 ${data.seconds} 秒</strong> 內行了 <strong>${data.lapsSteps} 步</strong>。<br>
+          按照你每分鐘大約步行 <strong>${Math.round(data.stepsIn60Min / 60)} 步</strong> 的速度，連續步行 60 分鐘預計可以行 <strong>${data.stepsIn60Min.toLocaleString()} 步</strong>！
+        </p>
+      `;
+      panel.classList.add('visible');
     }
 
-    const resultDiv = document.getElementById('result');
-    resultDiv.style.display = 'block';
-    resultDiv.innerHTML = `
-      <p>✅ 60 分鐘總步數：${totalSteps.toFixed(0)} 步</p>
-      <p>✅ 60 分鐘總距離：${totalDistance.toFixed(0)} 米</p>
-      <hr style="border: 1px solid #f8c471; margin: 15px 0;">
-      <p class="destination">📍 建議目的地：<br><strong>${destination}</strong></p>
-      <p class="desc">${desc}</p>
-    `;
-  }
-</script>
+    // 按鈕 2：計算 60 分鐘步行距離 & 推算最遠景點
+    function calculateDistance() {
+      const data = getInputData();
+      if (!data) return;
+
+      const destinationInfo = getFurthestLandmarkHTML(parseFloat(data.distM));
+      const panel = document.getElementById('resultPanel');
+      panel.style.borderLeftColor = "#2e7d32";
+
+      panel.innerHTML = `
+        <div class="result-title">📐 60 分鐘步行距離推算</div>
+        <div class="result-value">${data.distCm.toLocaleString()} cm</div>
+        <div style="font-size: 15px; font-weight: 600; color: #1b5e20; margin-bottom: 8px;">
+          相等於 <strong>${data.distM} 米</strong>（約 <strong>${data.distKm} 公里</strong>）！
+        </div>
+
+        <div class="highlight-box">
+          <div style="font-weight: bold; color: #1b5e20; font-size: 15px;">
+            📍 從學校（灣仔聖佛蘭士街 44-46 號）出發：
+          </div>
+          ${destinationInfo}
+        </div>
+      `;
+      panel.classList.add('visible');
+    }
+
+    // 根據步行距離計算「最遠可到達的一個景點」
+    function getFurthestLandmarkHTML(distMeters) {
+      const places = [
+        { name: "太古廣場三座 / 星街小區文藝街區", dist: 250 },
+        { name: "修頓球場 / 港鐵灣仔站", dist: 450 },
+        { name: "藍屋建築群 / 灣仔洪聖古廟", dist: 700 },
+        { name: "香港公園 / 金鐘添馬公園", dist: 1100 },
+        { name: "香港會議展覽中心 / 灣仔海濱長廊", dist: 1500 },
+        { name: "跑馬地馬場遊樂場", dist: 1800 },
+        { name: "中環遮打花園 / 摩天輪 (中環碼頭)", dist: 2200 },
+        { name: "銅鑼灣時代廣場 / 希慎廣場", dist: 2600 },
+        { name: "維多利亞公園 / 香港中央圖書館", dist: 3300 },
+        { name: "香港動植物公園 / 中環半山", dist: 3800 },
+        { name: "上環文武廟 / 西港城", dist: 4100 },
+        { name: "西營盤中山紀念公園 (海濱長廊草地)", dist: 4500 },
+        { name: "北角油街實現 (炮台山歷史文藝空間)", dist: 4800 },
+        { name: "香港大學 (薄扶林本部大樓 / 陸佑堂)", dist: 5000 },
+        { name: "北角海濱花園 (東岸板道)", dist: 5300 },
+        { name: "堅尼地城卑路乍灣海濱長廊", dist: 5800 },
+        { name: "鰂魚涌公園 (葛量洪號滅火輪展覽館)", dist: 6300 }
+      ];
+
+      // 找出所有可到達的景點
+      const reachable = places.filter(p => distMeters >= p.dist);
+
+      if (reachable.length === 0) {
+        const first = places[0];
+        const needMore = Math.round(first.dist - distMeters);
+        return `
+          <div class="furthest-card">
+            <div class="furthest-icon">🚶‍♀️</div>
+            <div>
+              <div class="furthest-name">加油！就快到第一個地標了！</div>
+              <div class="furthest-dist">再多行 <strong>${needMore} 米</strong> 就能到達 <strong>${first.name}</strong>（約 ${first.dist} 米）。</div>
+            </div>
+          </div>
+        `;
+      }
+
+      // 只取最遠的一個景點
+      const furthestPlace = reachable[reachable.length - 1];
+
+      // 找出下一個挑戰景點
+      const nextPlace = places.find(p => distMeters < p.dist);
+      let nextHtml = "";
+      if (nextPlace) {
+        const diff = Math.round(nextPlace.dist - distMeters);
+        nextHtml = `
+          <div class="next-target-box">
+            🎯 <strong>下一個挑戰目標：</strong>再多行 <strong>${diff} 米</strong> 就能抵達 <strong>${nextPlace.name}</strong>（約 ${nextPlace.dist} 米）！
+          </div>
+        `;
+      } else {
+        nextHtml = `
+          <div class="next-target-box" style="color: #e65100; font-weight: bold;">
+            🌟 太厲害了！你已經超越了所有預設地標，是真正的「健步之星」！
+          </div>
+        `;
+      }
+
+      return `
+        <div class="furthest-card">
+          <div class="furthest-icon">🏆</div>
+          <div>
+            <div style="font-size: 13px; color: #2e7d32; font-weight: bold; margin-bottom: 2px;">最遠可到達的地標：</div>
+            <div class="furthest-name">${furthestPlace.name}</div>
+            <div class="furthest-dist">距離學校約 <strong>${furthestPlace.dist.toLocaleString()} 米</strong>（約 ${(furthestPlace.dist / 1000).toFixed(1)} 公里）</div>
+          </div>
+        </div>
+        ${nextHtml}
+      `;
+    }
+
+    // 按鈕 3：了解如何得出結果(驗算)
+    function showVerification() {
+      const data = getInputData();
+      const panel = document.getElementById('resultPanel');
+      panel.style.borderLeftColor = "#f57c00";
+
+      let mathDetails = "";
+      if (data) {
+        mathDetails = `
+          <div style="background: #fff; padding: 10px; border-radius: 8px; margin: 8px 0; border: 1px dashed #ffa000;">
+            <strong>以你的數據為例：</strong><br>
+            • 行 5 圈所需秒數：${data.minutes} × 60 + ${data.seconds} = <strong>${data.totalSeconds} 秒</strong><br>
+            • 60 分鐘步數：${data.lapsSteps} ÷ ${data.totalSeconds} × 3600 = <strong>${data.stepsIn60Min} 步</strong><br>
+            • 60 分鐘距離：${data.stepsIn60Min} × ${data.stepLength} = <strong>${data.distCm} 厘米</strong> (即 ${data.distM} 米)
+          </div>
+        `;
+      }
+
+      panel.innerHTML = `
+        <div class="result-title">📱 了解如何得出結果(驗算)</div>
+        <div class="verify-box">
+          ${mathDetails}
+          <div style="margin-bottom: 8px;">
+            <span class="step-badge">第 1 步</span> <strong>計算 5 圈總秒數</strong><br>
+            計算機按法：<code>分鐘 × 60 + 秒 = [總秒數]</code>
+          </div>
+          <div style="margin-bottom: 8px;">
+            <span class="step-badge">第 2 步</span> <strong>計算每秒步數</strong><br>
+            計算機按法：<code>5 圈步數 ÷ [總秒數] = [每秒步數]</code>
+          </div>
+          <div style="margin-bottom: 8px;">
+            <span class="step-badge">第 3 步</span> <strong>推算 60 分鐘 (3600 秒) 總步數</strong><br>
+            計算機按法：<code>[每秒步數] × 3600 = [60 分鐘總步數]</code>
+          </div>
+          <div>
+            <span class="step-badge">第 4 步</span> <strong>推算 60 分鐘步行總距離</strong><br>
+            計算機按法：<code>[60 分鐘總步數] × 步距 (cm) = [厘米]</code><br>
+            轉為米：<code>÷ 100</code>；轉為公里：<code>÷ 100000</code>
+          </div>
+        </div>
+      `;
+      panel.classList.add('visible');
+    }
+  </script>
 </body>
 </html>
